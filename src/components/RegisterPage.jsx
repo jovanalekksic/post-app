@@ -1,12 +1,16 @@
 import React from "react";
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const LoginPage = () => {
+const RegisterPage = () => {
   const [userData, setUserData] = useState({
+    name: "",
     email: "",
     password: "",
   });
+
+  let navigate = useNavigate();
 
   function handleInput(e) {
     // console.log(e);
@@ -16,15 +20,13 @@ const LoginPage = () => {
     setUserData(newUserData);
   }
 
-  function handleLogin(e) {
+  function handleRegister(e) {
     e.preventDefault();
     axios
-      .post("http://127.0.0.1:8000/api/login", userData)
+      .post("http://127.0.0.1:8000/api/register", userData)
       .then((res) => {
         console.log(res.data);
-        if (res.data.success === true) {
-          window.sessionStorage.setItem("auth_token", res.data.access_token);
-        }
+        navigate("/login");
       })
       .catch((e) => {
         console.log(e);
@@ -42,13 +44,27 @@ const LoginPage = () => {
         <div className="row d-flex justify-content-center align-items-center h-100">
           <div className="col-md-9 col-lg-6 col-xl-5">
             <img
-              src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+              src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp"
               className="img-fluid"
               alt="Sample image"
             />
           </div>
           <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-            <form onSubmit={handleLogin}>
+            <form onSubmit={handleRegister}>
+              <div className="form-outline mb-4">
+                <input
+                  type="name"
+                  id="form3Example2"
+                  className="form-control form-control-lg"
+                  placeholder="Enter a valid username"
+                  name="name"
+                  onInput={handleInput}
+                />
+                <label className="form-label" htmlFor="form3Example2">
+                  Username
+                </label>
+              </div>
+
               <div className="form-outline mb-4">
                 <input
                   type="email"
@@ -86,14 +102,8 @@ const LoginPage = () => {
                     paddingRight: 2.5 + "rem",
                   }}
                 >
-                  Login
+                  Register
                 </button>
-                <p className="small fw-bold mt-2 pt-1 mb-0">
-                  Don't have an account?{" "}
-                  <a href="/register" className="link-danger">
-                    Register
-                  </a>
-                </p>
               </div>
             </form>
           </div>
@@ -103,4 +113,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;
